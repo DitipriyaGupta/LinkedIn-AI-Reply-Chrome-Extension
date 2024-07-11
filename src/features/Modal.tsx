@@ -16,8 +16,11 @@ const Modal: React.FC<ModalProps> = ({ isOpen, setIsOpen }) => {
 
   const handleQuery = (e: any) => {
     e.preventDefault()
-    setQuery(input)
-    setInput("")
+    if (input.trim() !== "") {
+      setQuery(input)
+      setInput("")
+      setIsGenerated(true)
+    }
   }
 
   const closeModal = () => {
@@ -25,7 +28,7 @@ const Modal: React.FC<ModalProps> = ({ isOpen, setIsOpen }) => {
   }
   const handleInsert = () => {
     closeModal()
-    const placeholder=document.querySelector(".msg-form__placeholder")
+    const placeholder = document.querySelector(".msg-form__placeholder")
     const textarea = document.querySelector(".msg-form__contenteditable")
     placeholder?.remove()
     textarea.children[0].innerHTML = SAMPLE_RESPONSE
@@ -34,16 +37,20 @@ const Modal: React.FC<ModalProps> = ({ isOpen, setIsOpen }) => {
     setIsGenerated(false)
   }
   const handleIsOpenCheck = () => {
-     closeModal() 
+    closeModal()
   }
-  const handleModal=(e:React.MouseEvent)=>{
-e.stopPropagation()
+  const handleModal = (e: React.MouseEvent) => {
+    e.stopPropagation()
   }
   return (
     <>
       {isOpen && (
-        <div className="fixed inset-0 bg-black bg-opacity-30 backdrop-blur-sm flex justify-center items-center" onClick={handleIsOpenCheck}>
-          <div className="p-3 bg-[#F9FAFB] w-[350px] rounded-xl" onClick={handleModal}>
+        <div
+          className="fixed inset-0 bg-black bg-opacity-30 backdrop-blur-sm flex justify-center items-center"
+          onClick={handleIsOpenCheck}>
+          <div
+            className="p-3 bg-[#F9FAFB] w-[350px] rounded-xl"
+            onClick={handleModal}>
             {query && (
               <>
                 <div className="flex justify-end">
@@ -60,14 +67,13 @@ e.stopPropagation()
                 </div>
               </>
             )}
-<div className="p-2">
             <input
               placeholder="Your prompt"
               type="text"
               className="rounded-md  border-2 border-gray-300 w-full mb-3"
               value={input}
               onChange={(e) => setInput(e.target.value)}
-            /></div>
+            />
 
             <div className="flex justify-end">
               {isGenerated ? (
@@ -97,7 +103,8 @@ e.stopPropagation()
                     setIsGenerated(!isGenerated)
                     handleQuery(e)
                   }}
-                  className="h-10 w-32 bg-blue-500 rounded text-white ">
+                  className="h-10 w-32 bg-blue-500 rounded text-white "
+                  disabled={!input}>
                   <span className="flex justify-center items-center gap-2">
                     <img src={GenerateImage} alt="image" className="h-5 w-5" />
                     <p className="tracking-wider font-semibold">Generate</p>
